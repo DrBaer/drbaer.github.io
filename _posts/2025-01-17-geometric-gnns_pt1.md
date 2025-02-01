@@ -133,7 +133,7 @@ $$\begin{equation}\label{eq:msg_gemnet_q}
 The computational cost of GemNet-Q's message interaction, represented by $$\hat{\mathbf{m}}_{ij}^{dihedral}$$ for GemNet-Q in Eq. \ref{eq:msg_gemnet_q}, is clearly quadratic with respect to the average number of neighbors. This quadratic scaling makes the approach of relying solely on invariant information quickly computationally infeasible for larger systems. While the limitations in distinguishing graphs $\mathcal{G}_1$ and $\mathcal{G}_2$ (as illustrated in Fig. 3) might be less significant for small molecules, they could pose a substantial challenge when dealing with longer, more complex protein chains.  To address this, two potential strategies emerge, and in this post, we will focus on the first:
 
 1. Use a fully connected graph and ...?
-2. Use more informative features, e.g. equivariant cartesian tensors as node/edge information, resulting in equivariant GNN <d-cite key="schutt_equivariant_2021,wang_enhancing_2024" /> {#equivariant}
+2. Use more informative features, e.g. equivariant cartesian tensors as node/edge information, resulting in equivariant GNN <d-cite key="schutt_equivariant_2021,wang_enhancing_2024" />
 
 ### Fully Connected Graphs and Transformers 
 
@@ -274,4 +274,4 @@ Invariant GNNs have limitations, but they can be really effective and are relati
 
 As an alternative, one might perform local computations with 3-body GNNS and interleave with fully connected computations like triangle updates. This is exactly what we usually do in radar point cloud processing, as the data is quite sparse. We perform local computation within clusters, e.g. with sparse convolutions and exchange information globally via transformers.
 
-So the post got long enough, but I hope you enjoyed it. In my next blog post, I want to explore the second possibility mentioned [here](#equivariant): using equivariant features<d-cite key="wang_enhancing_2024" />.
+So the post got long enough, but I hope you enjoyed it. In my next blog post, I want to explore the second possibility for getting more expressivity of the networks: using equivariant features<d-cite key="wang_enhancing_2024" />.
