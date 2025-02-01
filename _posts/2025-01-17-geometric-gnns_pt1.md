@@ -1,7 +1,7 @@
 ---
 layout: distill
 title: Invariant Graph Neural Networks and Alfa Fold 3
-description: A small journey from Invariant Graph Neural Networks to Alfa Fold 3 Pairformer and back.
+description: A small journey from SE(3) Invariant Graph Neural Networks to Alfa Fold 3 Pairformer and back.
 draft: false
 tags:
 giscus_comments: false
@@ -60,6 +60,10 @@ _styles: >
     font-size: 16px;
   }
 ---
+This blog post is part of a series on geometric graph neural networks (GNNs) and their applications:<br />
+:arrow_right:[Part 1]({% post_url 2025-01-17-geometric-gnns_pt1 %}): Invariant GNNs and Alphafold 3<br />
+[Part 2]({% post_url 2025-01-21-geometric-gnns_pt2 %}): Equivariant GNNs with Cartesian Tensors
+
 Whether predicting molecular properties or classifying objects in a point cloud, many tasks in science and engineering involve data invariant to rotation and translation. This is where invariant graph neural networks (GNNs) excel. In this post, we will explore the limitations of different invariant GNNs and connect them to AlphaFold 3's Pairformer module. While my current work involves analyzing sensor data point clouds, the principles of invariance are broadly applicable, including in AlphaFold 3's prediction of molecular structures.
 
 We will specifically examine the Pairformer's "triangle updates" and draw a connection between them and a specific type of invariant GNN. This offers a fresh perspective on the Pairformer's effectiveness, going beyond the original paper's explanation via the triangle inequality. A deep dive into AlphaFold 3 can be found in a blog post by Elana Simon's <d-cite key="simon_illustrated_alphafold" />, and for a geometric GNN survey, see Duval et al. <d-cite key="duval_hitchhikers_2023" />. I'll follow the notation of Duval et al. in this post, which aligns with PyTorch Geometric's `flow="target_to_source"` inr `propagate()`.
@@ -77,7 +81,7 @@ Given that our target predictions are invariant to rotations and translations, i
   <div id="fig1" class="caption" style="text-align: left;">Fig. 1 Geometric graph with invariant features. Under rotation and translation the node features $\mathbf{s}_i$ are invariant, and the node positions $\vec{x}_i$ are rotated and translated.</div>
 </div>
 
-*Invariant graph neural networks* (GNNs) are described by a geometric graph $$\mathcal{G} = (\mathbf{S}, \mathbf{A}, \vec{\mathbf{x}})$$ with nodes $$\mathcal{V}_{\mathcal{G}} = \{1, \ldots, n\}$$, node scalar feature matrix $$\mathbf{S} \in \mathbb{R}^{n\mathrm{x}c}$$, adjacency matrix $$\mathbf{A} \in \mathbb{R}^{n\mathrm{x}n}$$, and atom positions $$\vec{\mathbf{x}} \in \mathbb{R}^{n\mathrm{x}3}$$. Each node $$i$$ has node features $$\mathbf{s}_{i} \in \mathbb{R}^{c}$$ and a position $$\vec{x}_{i} \in \mathbb{R}^{3}$$.  The features $$\mathbf{s}_{i}$$ are invariant under transformations in SE(3). The adjacency matrix $$\mathbf{A}$$ defines the neighborhood $$\mathcal{N}_i = \{ j \in \mathcal{V}_{\mathcal{G}}\setminus i  \vert a_{ij} \neq 0 \}$$.
+*Invariant graph neural networks* (GNNs) are described by a geometric graph $$\mathcal{G} = (\mathbf{S}, \mathbf{A}, \vec{\mathbf{x}})$$ with nodes $$\mathcal{V}_{\mathcal{G}} = \{1, \ldots, n\}$$, node scalar feature matrix $$\mathbf{S} \in \mathbb{R}^{n \times c}$$, adjacency matrix $$\mathbf{A} \in \mathbb{R}^{n \times n}$$, and atom positions $$\vec{\mathbf{x}} \in \mathbb{R}^{n \times 3}$$. Each node $$i$$ has node features $$\mathbf{s}_{i} \in \mathbb{R}^{c}$$ and a position $$\vec{x}_{i} \in \mathbb{R}^{3}$$.  The features $$\mathbf{s}_{i}$$ are invariant under transformations in SE(3). The adjacency matrix $$\mathbf{A}$$ defines the neighborhood $$\mathcal{N}_i = \{ j \in \mathcal{V}_{\mathcal{G}}\setminus i  \vert a_{ij} \neq 0 \}$$.
 
 <div class="gnn_overview">
   {% include figure.liquid path="assets/img/geometric-gnns_pt1/gnn_overview.svg" class="img-fluid rounded z-depth-1" %}
